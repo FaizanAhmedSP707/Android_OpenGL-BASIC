@@ -18,6 +18,38 @@ class OpenGLRenderer : GLSurfaceView.Renderer {
         // be drawn over further objects
         GLES20.glClearDepthf(1.0f)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
+
+        // Setting up shaders
+        val vertexShaderSrc =
+            "attribute vec4 aVertex;\n" +
+                "void main(void)\n" +
+                "{\n" +
+                "gl_Position = aVertex;\n" +
+                "}\n"
+
+        val fragmentShaderSrc =
+            "precision mediump float;\n" +
+                "uniform vec4 uColour;\n" +
+                "void main(void)\n" +
+                "{\n" +
+                "gl_FragColor = uColour;\n" +
+                "}\n"
+
+        fun compileShader(shaderType: Int, shaderCode: String) : Int {
+            val shader = GLES20.glCreateShader(shaderType)
+            GLES20.glShaderSource(shader, shaderCode)
+            GLES20.glCompileShader(shader)
+            return shader
+        }
+
+        fun linkShader(vertexShader: Int, fragmentShader: Int) : Int {
+            val shaderProgram = GLES20.glCreateProgram()
+            GLES20.glAttachShader(shaderProgram, vertexShader)
+            GLES20.glAttachShader(shaderProgram, fragmentShader)
+            GLES20.glLinkProgram(shaderProgram)
+            GLES20.glUseProgram(shaderProgram)
+            return shaderProgram
+        }
     }
 
     // We draw our shapes here
