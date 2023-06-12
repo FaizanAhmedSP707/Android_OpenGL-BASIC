@@ -50,6 +50,18 @@ class OpenGLRenderer : GLSurfaceView.Renderer {
             GLES20.glUseProgram(shaderProgram)
             return shaderProgram
         }
+
+        // Setting up a vertex buffer
+        fun makeBuffer(vertices: FloatArray) : FloatBuffer {
+            val byteBuf : ByteBuffer = ByteBuffer.allocateDirect(vertices.size * Float.SIZE_BYTES)
+            byteBuf.order(ByteOrder.nativeOrder())
+            val floatBuf : FloatBuffer = byteBuf.asFloatBuffer()
+
+            // Insert vertices into the array
+            floatBuf.put(vertices)
+            floatBuf.position(0)
+            return floatBuf
+        }
     }
 
     // We draw our shapes here
